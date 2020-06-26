@@ -1,19 +1,15 @@
 package cn.itcast.service;
 
-import cn.itcast.domain.PageBean;
+import cn.hutool.db.Entity;
+import cn.hutool.db.PageResult;
+import cn.itcast.domain.LoginUser;
 import cn.itcast.domain.User;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Map;
 
 public interface UserService {
-    /**
-     * 查询所有用户信息
-     * @return
-     */
-    List<User> findAll();
 
-    User login(User user);
+    LoginUser login(LoginUser loginUser);
 
     void add(User user);
 
@@ -21,26 +17,26 @@ public interface UserService {
      * 根据id删除user
      * @param id
      */
-    void deleteUser(String id);
+    void delete(String id);
 
     /**
      * 根据id查询
      * @param id
      * @return
      */
-    User findUserById(String id);
+    User findById(String id);
 
     /**
      * 修改用户信息
      * @param user
      */
-    void updateUser(User user);
+    void update(User user);
 
     /**
      * 批量删除
      * @param uids
      */
-    void delSelectedUser(String[] uids);
+    void delSelected(String[] uids);
 
     /**
      * 分页查询
@@ -48,5 +44,5 @@ public interface UserService {
      * @param rows
      * @return
      */
-    PageBean<User> findUserByPage(String currentPage, String rows);
+    PageResult<Entity> findByPage(int currentPage, int rows,Map<String,String> map);
 }

@@ -1,4 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="cn.hutool.db.Entity" %>
+<%@ page import="cn.hutool.db.PageResult" %>
+<%@ page import="cn.hutool.core.lang.Console" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!-- 网页使用的语言 -->
@@ -60,18 +63,18 @@
 <div class="container">
     <h3 style="text-align: center">用户信息列表</h3>
     <div style="float: left">
-        <form class="form-inline">
+        <form class="form-inline" action="findUserByPageServlet" method="post">
             <div class="form-group">
                 <label for="exampleInputName2">姓名</label>
-                <input type="text" class="form-control" id="exampleInputName2">
+                <input type="text" name="name" value="${requestScope.condition['name']}" class="form-control" id="exampleInputName2">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail2">籍贯</label>
-                <input type="email" class="form-control" id="exampleInputEmail2">
+                <input type="text" name="address" value="${requestScope.condition['address']}" class="form-control" id="exampleInputEmail2">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail3">邮箱</label>
-                <input type="email" class="form-control" id="exampleInputEmail3">
+                <input type="text" name="email" value="${requestScope.condition['email']}" class="form-control" id="exampleInputEmail3">
             </div>
             <button type="submit" class="btn btn-default">查询</button>
         </form>
@@ -93,7 +96,7 @@
                 <th>邮箱</th>
                 <th>操作</th>
             </tr>
-            <c:forEach items="${users}" var="user" varStatus="s">
+            <c:forEach items="${requestScope.pb}" var="user" varStatus="s">
                 <tr>
                     <th><input type="checkbox" value="${user.id}" name="uid"></th>
                     <td>${s.count}</td>
@@ -115,22 +118,61 @@
 
         <nav aria-label="Page navigation">
             <ul class="pagination">
-                <li>
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
+                <c:if test="${pb.isFirst()}">
+                    <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                </c:if>
+                <c:if test="${!pb.isFirst()}">
+                    <li>
+                        <a href="findUserByPageServlet?currentPage=${pb.getPage()-1}&rows=10&name=${condition.name}&address=${condition.address}&email=${condition.email}" aria-label="Previous">
+                </c:if>
+                            <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
+                <%--分页逻辑，最多显示10页--%>
+                <%
+                    PageResult<Entity> pb= (PageResult<Entity>) request.getAttribute("pb");
+                    int begin=0;
+                    int end=pb.getTotalPage();
+                    if (pb.getTotalPage() >= 10) {
+                        begin = pb.getPage() - 5;
+                        end = pb.getPage() + 4;
+                        if (begin < 0) {
+                            begin = 0;
+                            end = 10 + begin;
+                        }
+                        if (end > pb.getTotalPage()) {
+                            end = pb.getTotalPage();
+                            begin = end - 10;
+                        }
+                    }
+                    request.setAttribute("begin",begin);
+                    // end最小为1，否则c:forEach报错
+                    request.setAttribute("end", Math.max(end, 1));
+                %>
+
+                <c:forEach begin="${begin}" end="${end-1}" var="i">
+                    <c:if test="${requestScope.pb.getPage()==i}">
+                        <li class="active"><a href="findUserByPageServlet?currentPage=${i}&rows=10&name=${condition.name}&address=${condition.address}&email=${condition.email}">${i+1}</a></li>
+                    </c:if>
+                    <c:if test="${requestScope.pb.getPage()!=i}">
+                        <li><a href="findUserByPageServlet?currentPage=${i}&rows=10&name=${condition.name}&address=${condition.address}&email=${condition.email}">${i+1}</a></li>
+                    </c:if>
+                </c:forEach>
+
+
+                <c:if test="${pb.isLast()}">
+                    <li class="disabled">
+                        <a href="#" aria-label="Next">
+                </c:if>
+                <c:if test="${!pb.isLast()}">
+                    <li>
+                        <a href="findUserByPageServlet?currentPage=${requestScope.pb.getPage()+1}&rows=10&name=${condition.name}&address=${condition.address}&email=${condition.email}" aria-label="Next">
+                </c:if>
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
-                <span style="font-size: 25px;margin-left: 10px">共16条记录，共4页</span>
+                <span style="font-size: 25px;margin-left: 10px">共${pb.getTotal()}条记录，共${pb.getTotalPage()}页</span>
             </ul>
         </nav>
     </div>

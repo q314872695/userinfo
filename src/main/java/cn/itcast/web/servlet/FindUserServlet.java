@@ -1,5 +1,6 @@
 package cn.itcast.web.servlet;
 
+import cn.hutool.extra.spring.SpringUtil;
 import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
 import org.springframework.web.context.WebApplicationContext;
@@ -16,9 +17,8 @@ import java.io.IOException;
 public class FindUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        UserService userService = applicationContext.getBean("userService", UserService.class);
-        User user = userService.findUserById(id);
+        UserService userService = SpringUtil.getBean("userService", UserService.class);
+        User user = userService.findById(id);
         request.setAttribute("user", user);
         request.getRequestDispatcher("/update.jsp").forward(request, response);
     }

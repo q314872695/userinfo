@@ -1,5 +1,7 @@
 package cn.itcast.web.servlet;
 
+import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -20,17 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class UpdateUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
-        Map<String, String[]> map = request.getParameterMap();
-        User user = new User();
-        try {
-            BeanUtils.populate(user,map);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        UserService userService = applicationContext.getBean("userService", UserService.class);
-        userService.updateUser(user);
-        response.sendRedirect(request.getContextPath()+"/userListServlet");
+        User user = ServletUtil.toBean(request, User.class, false);
+        UserService userService = SpringUtil.getBean("userService", UserService.class);
+        userService.update(user);
+        response.sendRedirect(request.getContextPath()+"/findUserByPageServlet?currentPage=0&rows=10");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

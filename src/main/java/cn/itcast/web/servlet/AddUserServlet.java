@@ -1,5 +1,7 @@
 package cn.itcast.web.servlet;
 
+import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -21,18 +23,12 @@ public class AddUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 设置编码
         request.setCharacterEncoding("utf-8");
-        Map<String, String[]> map = request.getParameterMap();
-        User user = new User();
-        try {
-            BeanUtils.populate(user,map);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        UserService userService = applicationContext.getBean("userService", UserService.class);
+        User user = (User) ServletUtil.toBean(request, User.class,false);
+        UserService userService = SpringUtil.getBean("userService", UserService.class);
+
         userService.add(user);
 
-        response.sendRedirect(request.getContextPath()+"/userListServlet");
+        response.sendRedirect(request.getContextPath()+"/findUserByPageServlet?currentPage=0&rows=10");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

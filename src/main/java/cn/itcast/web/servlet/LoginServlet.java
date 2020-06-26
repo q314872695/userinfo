@@ -1,5 +1,11 @@
 package cn.itcast.web.servlet;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.db.Entity;
+import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.log.StaticLog;
+import cn.itcast.domain.LoginUser;
 import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
 import cn.itcast.service.impl.UserServiceImpl;
@@ -29,25 +35,19 @@ public class LoginServlet extends HttpServlet {
         session.removeAttribute("CHECKCODE_SERVER");
         if (!checkcode_server.equalsIgnoreCase(verifycode)) {
             // 验证码不正确
+            StaticLog.debug("登录信息：{}","验证码错误");
             request.setAttribute("login_msg","验证码错误！");
             request.getRequestDispatcher("/login.jsp").forward(request,response);
             return;
         }
-
-        Map<String, String[]> map = request.getParameterMap();
-        User user = new User();
-        try {
-            BeanUtils.populate(user,map);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        UserService service = context.getBean("userService", UserService.class);
-        User loginUser = service.login(user);
+        LoginUser user = ServletUtil.toBean(request, LoginUser.class, false);
+        UserService service = SpringUtil.getBean("userService");
+        LoginUser loginUser = service.login(user);
         if (loginUser != null) {
             session.setAttribute("user", loginUser);
             response.sendRedirect(request.getContextPath()+"/index.jsp");
         }else{
+            StaticLog.debug("登录信息：{}","用户名或密码错误");
             request.setAttribute("login_msg","用户名或密码错误");
             request.getRequestDispatcher("/login.jsp").forward(request,response);
         }

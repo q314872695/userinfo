@@ -1,11 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: lxy
-  Date: 2020/5/24
-  Time: 9:15
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"  %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -24,10 +17,10 @@
     </script>
 </head>
 <body>
-<div>${user.name},欢迎您</div>
+<div>${user.username},欢迎您</div>
 <div align="center">
     <a
-            href="${pageContext.request.contextPath}/userListServlet" style="text-decoration:none;font-size:33px">查询所有用户信息
+            href="${pageContext.request.contextPath}/findUserByPageServlet?currentPage=0&rows=10" style="text-decoration:none;font-size:33px">查询所有用户信息
     </a>
 </div>
 </body>

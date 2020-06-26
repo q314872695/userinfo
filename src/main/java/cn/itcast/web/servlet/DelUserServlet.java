@@ -1,5 +1,6 @@
 package cn.itcast.web.servlet;
 
+import cn.hutool.extra.spring.SpringUtil;
 import cn.itcast.service.UserService;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -15,10 +16,9 @@ import java.io.IOException;
 public class DelUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        UserService userService = applicationContext.getBean("userService", UserService.class);
-        userService.deleteUser(id);
-        response.sendRedirect(request.getContextPath()+"/userListServlet");
+        UserService userService = SpringUtil.getBean("userService", UserService.class);
+        userService.delete(id);
+        response.sendRedirect(request.getContextPath()+"/findUserByPageServlet?currentPage=0&rows=10");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

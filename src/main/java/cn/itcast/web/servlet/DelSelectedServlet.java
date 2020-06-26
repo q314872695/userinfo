@@ -1,5 +1,6 @@
 package cn.itcast.web.servlet;
 
+import cn.hutool.extra.spring.SpringUtil;
 import cn.itcast.service.UserService;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -14,10 +15,10 @@ import java.io.IOException;
 public class DelSelectedServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] uids = request.getParameterValues("uid");
-        UserService userService = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext()).getBean("userService", UserService.class);
-        userService.delSelectedUser(uids);
+        UserService userService = SpringUtil.getBean("userService", UserService.class);
+        userService.delSelected(uids);
 
-        response.sendRedirect(request.getContextPath()+"/userListServlet");
+        response.sendRedirect(request.getContextPath()+"/findUserByPageServlet?currentPage=0&rows=10");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

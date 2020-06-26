@@ -22,7 +22,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script>
         function back() {
-            location.href="userListServlet";
+            location.href = "findUserByPageServlet?currentPage=0&rows=10";
         }
     </script>
 
@@ -38,14 +38,8 @@
 
         <div class="form-group">
             <label>性别：</label>
-            <c:if test="${user.gender=='男'}">
-                <input type="radio" name="gender" value="男" checked/>男
-                <input type="radio" name="gender" value="女"/>女
-            </c:if>
-            <c:if test="${user.gender=='女'}">
-                <input type="radio" name="gender" value="男"/>男
-                <input type="radio" name="gender" value="女" checked/>女
-            </c:if>
+            <input type="radio" name="gender" value="男" <c:if test="${user.gender=='男'}">checked</c:if> />男
+            <input type="radio" name="gender" value="女" <c:if test="${user.gender=='女'}">checked</c:if>/>女
 
 
         </div>
