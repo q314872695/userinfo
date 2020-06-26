@@ -51,24 +51,7 @@
 
         <div class="form-group">
             <label for="address">籍贯：</label>
-            <select name="address" class="form-control" id="address">
-                <c:if test="${user.address=='广东'}">
-                    <option value="广东" selected>广东</option>
-                    <option value="广西">广西</option>
-                    <option value="湖南">湖南</option>
-                </c:if>
-                <c:if test="${user.address=='广西'}">
-                    <option value="广东">广东</option>
-                    <option value="广西" selected>广西</option>
-                    <option value="湖南">湖南</option>
-                </c:if>
-                <c:if test="${user.address=='湖南'}">
-                    <option value="广东">广东</option>
-                    <option value="广西">广西</option>
-                    <option value="湖南" selected>湖南</option>
-                </c:if>
-
-            </select>
+            <input name="address" type="text" value="${user.address}" class="form-control" id="address" placeholder="请输入籍贯">
         </div>
 
         <div class="form-group">

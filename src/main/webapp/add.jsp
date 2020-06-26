@@ -28,9 +28,14 @@
     <script src="js/jquery-2.1.0.min.js"></script>
     <!-- 3. 导入bootstrap的js文件 -->
     <script src="js/bootstrap.min.js"></script>
+    <script>
+        function back() {
+            location.href = "findUserByPageServlet?currentPage=0&rows=10";
+        }
+    </script>
 </head>
 <body>
-<div class="container">
+<div class="container" style="width: 400px">
     <center><h3>添加联系人页面</h3></center>
     <form action="addUserServlet" method="post">
         <div class="form-group">
@@ -51,11 +56,7 @@
 
         <div class="form-group">
             <label for="address">籍贯：</label>
-            <select name="address" class="form-control" id="address">
-                <option value="广东">广东</option>
-                <option value="广西">广西</option>
-                <option value="湖南">湖南</option>
-            </select>
+            <input name="address" type="text" class="form-control" id="address" placeholder="请输入籍贯">
         </div>
 
         <div class="form-group">
@@ -71,7 +72,7 @@
         <div class="form-group" style="text-align: center">
             <input class="btn btn-primary" type="submit" value="提交" />
             <input class="btn btn-default" type="reset" value="重置" />
-            <input class="btn btn-default" type="button" value="返回" />
+            <input class="btn btn-default" type="button" onclick="back()" value="返回" />
         </div>
     </form>
 </div>

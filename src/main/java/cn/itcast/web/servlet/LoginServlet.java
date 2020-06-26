@@ -1,18 +1,10 @@
 package cn.itcast.web.servlet;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.db.Entity;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.log.StaticLog;
 import cn.itcast.domain.LoginUser;
-import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
-import cn.itcast.service.impl.UserServiceImpl;
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 @WebServlet("/loginServlet")
 public class LoginServlet extends HttpServlet {

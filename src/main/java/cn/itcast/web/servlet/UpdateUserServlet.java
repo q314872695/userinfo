@@ -4,9 +4,6 @@ import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,9 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 @WebServlet("/updateUserServlet")
 public class UpdateUserServlet extends HttpServlet {
